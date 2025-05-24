@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Paint with Fingers</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 20px;
+                font-family: Arial, sans-serif;
+                background: #f0f0f0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            h1 {
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            .container {
+                position: relative;
+                border: 2px solid #333;
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            #videoElement {
+                transform: scaleX(-1);
+                display: block;
+            }
+
+            #paintCanvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                transform: scaleX(-1);
+            }
+
+            .controls {
+                margin-top: 20px;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .color-picker {
+                width: 40px;
+                height: 40px;
+                border: 2px solid #333;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: transform 0.2s;
+            }
+
+            .color-picker:hover {
+                transform: scale(1.1);
+            }
+
+            .color-picker.active {
+                border-width: 4px;
+                transform: scale(1.2);
+            }
+
+            button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                background: #333;
+                color: white;
+                cursor: pointer;
+                font-size: 14px;
+                transition: background 0.2s;
+            }
+
+            button:hover {
+                background: #555;
+            }
+
+            .brush-size {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            input[type="range"] {
+                width: 100px;
+            }
+
+            .status {
+                margin-top: 20px;
+                padding: 10px;
+                border-radius: 5px;
+                text-align: center;
+                min-height: 20px;
+            }
+
+            .status.loading {
+                background: #fff3cd;
+                color: #856404;
+                border: 1px solid #ffeaa7;
+            }
+
+            .status.ready {
+                background: #d1edff;
+                color: #0c5460;
+                border: 1px solid #bee5eb;
+            }
+
+            .status.error {
+                background: #f8d7da;
+                color: #721c24;
+                border: 1px solid #f5c6cb;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Paint with Fingers</h1>
+    
+        <div style="text-align: center; margin-bottom: 15px; padding: 10px; background: #e3f2fd; border: 1px solid #2196f3; border-radius: 5px; color: #1565c0;">
+            <strong>🎨 Instructions:</strong> Hold <kbd style="background: #fff; padding: 2px 6px; border: 1px solid #ccc; border-radius: 3px; font-weight: bold;">SHIFT</kbd> key + Point with index finger (middle finger folded) to paint
+        </div>
+
+        <div class="container">
+            <video
+                id="videoElement"
+                width="640"
+                height="480"
+                autoplay
+                muted
+            ></video>
+            <canvas id="paintCanvas" width="640" height="480"></canvas>
+        </div>
+
+        <div class="controls">
+            <div
+                class="color-picker active"
+                style="background-color: #ff0000"
+                data-color="#ff0000"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #00ff00"
+                data-color="#00ff00"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #0000ff"
+                data-color="#0000ff"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #ffff00"
+                data-color="#ffff00"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #ff00ff"
+                data-color="#ff00ff"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #00ffff"
+                data-color="#00ffff"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #000000"
+                data-color="#000000"
+            ></div>
+            <div
+                class="color-picker"
+                style="background-color: #ffffff"
+                data-color="#ffffff"
+            ></div>
+
+            <div class="brush-size">
+                <label for="brushSize">Size:</label>
+                <input type="range" id="brushSize" min="1" max="20" value="5" />
+                <span id="brushSizeValue">5</span>
+            </div>
+
+            <button id="clearCanvas">Clear Canvas</button>
+            <button id="saveCanvas">Save Image</button>
+        </div>
+
+        <div id="status" class="status loading">
+            Loading hand tracking model...
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+        <script src="dist/app.js" type="module"></script>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "paint-with-fingers",
+  "version": "1.0.0",
+  "description": "A web application that uses webcam hand tracking to paint on canvas with finger movements",
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "python3 -m http.server 8000",
+    "start": "npm run build && npm run serve",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "hand-tracking",
+    "canvas",
+    "painting",
+    "mediapipe",
+    "typescript",
+    "computer-vision"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": ""
+}
